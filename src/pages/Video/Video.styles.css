@@ -1,13 +1,13 @@
-.homepage {
+.videopage {
   text-align: center;
   height: max-content;
 }
 
-.homepage h1 {
+.videopage h1 {
   font-size: 3rem;
   letter-spacing: -2px;
 }
 
-.homepagegrid {
+.videopagegrid {
   height: 110vh;
 }

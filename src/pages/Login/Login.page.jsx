@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router';
+import { Button, Form } from 'semantic-ui-react';
 
+import Layout from '../../components/Layout';
 import { useAuth } from '../../providers/Auth';
 import './Login.styles.css';
 
@@ -11,28 +13,28 @@ function LoginPage() {
   function authenticate(event) {
     event.preventDefault();
     login();
-    history.push('/secret');
+    history.push('/');
   }
 
   return (
-    <section className="login">
-      <h1>Welcome back!</h1>
-      <form onSubmit={authenticate} className="login-form">
-        <div className="form-group">
-          <label htmlFor="username">
+    <Layout>
+      <section className="login">
+        <h1>Welcome back!</h1>
+        <Form onSubmit={authenticate} className="login-form">
+          <div className="form-group">
             <strong>username </strong>
-            <input required type="text" id="username" />
-          </label>
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">
+            <Form.Input required type="text" id="username" />
+          </div>
+          <div className="form-group">
             <strong>password </strong>
-            <input required type="password" id="password" />
-          </label>
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </section>
+            <Form.Input required type="password" id="password" />
+          </div>
+          <Button type="submit" primary>
+            Login
+          </Button>
+        </Form>
+      </section>
+    </Layout>
   );
 }
 

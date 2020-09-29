@@ -1,37 +1,55 @@
-import React, { useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-
-import { useAuth } from '../../providers/Auth';
+import React, { useEffect, useRef, useState } from 'react';
+import { Header } from 'semantic-ui-react';
+import { useHistory } from 'react-router';
+import APIClient from '../../client/apiClient';
 import './Home.styles.css';
+import SidebarMenu from '../../components/Menus/Sidebar.component';
+import CardGroup from './components/CardGroup.component';
 
 function HomePage() {
-  const history = useHistory();
   const sectionRef = useRef(null);
-  const { authenticated, logout } = useAuth();
+  const apiClient = new APIClient();
+  const [payload, setPayload] = useState([]);
+  const history = useHistory();
+  const params = new URLSearchParams(history.location.search);
+  const search = params.get('search');
 
-  function deAuthenticate(event) {
-    event.preventDefault();
-    logout();
-    history.push('/');
-  }
+  const requestOverview = async () => {
+    if (search == null) {
+      try {
+        const response = await apiClient.getOverview();
+        console.log('Request Returned...', response);
+        setPayload(response.items);
+      } catch (error) {
+        console.log('Request Failed...', error);
+      }
+    } else {
+      try {
+        const response = await apiClient.getSearch(search);
+        console.log('Request Returned...', response);
+        setPayload(response.items);
+      } catch (error) {
+        console.log('Request Failed...', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    requestOverview();
+  }, []);
+
+  useEffect(() => {
+    history.listen(requestOverview);
+  }, []);
 
   return (
     <section className="homepage" ref={sectionRef}>
-      <h1>Hello stranger!</h1>
-      {authenticated ? (
-        <>
-          <h2>Good to have you back</h2>
-          <span>
-            <Link to="/" onClick={deAuthenticate}>
-              ← logout
-            </Link>
-            <span className="separator" />
-            <Link to="/secret">show me something cool →</Link>
-          </span>
-        </>
-      ) : (
-        <Link to="/login">let me in →</Link>
-      )}
+      <SidebarMenu>
+        <Header as="h1" color="blue">
+          Hello stranger!
+        </Header>
+        <CardGroup payload={payload} />
+      </SidebarMenu>
     </section>
   );
 }
