@@ -5,31 +5,27 @@ import AuthProvider from '../../providers/Auth';
 import HomePage from '../../pages/Home';
 import LoginPage from '../../pages/Login';
 import NotFound from '../../pages/NotFound';
-import SecretPage from '../../pages/Secret';
 import VideoPage from '../../pages/Video';
 import FavoritesPage from '../../pages/Favorites';
-import Private from '../Private';
+import Private from '../Private/Private.component';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Switch>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
           <Route exact path="/video/:id">
             <VideoPage />
           </Route>
-          <Route exact path="/favorites">
+          <Private exact path="/favorites">
             <FavoritesPage />
-          </Route>
+          </Private>
           <Route exact path="/login">
             <LoginPage />
           </Route>
-          <Private exact path="/secret">
-            <SecretPage />
-          </Private>
+          <Route exact path="/:key?">
+            <HomePage />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>

@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Form, Menu } from 'semantic-ui-react';
 
-function HomeMenu({ useAuth, deAuthenticate, sidebarVisible }) {
+function HomeMenu({ useAuth, sidebarVisible }) {
   const history = useHistory();
-  const { authenticated } = useAuth();
+  const { logout, authenticated } = useAuth();
   const [search, setSearch] = useState('');
 
   function onSearch() {
     if (search !== '') {
-      history.push({
-        pathname: '/',
-        search: `search=${search}`,
-      });
+      history.push(`/${search}`)
     }
+  }
+
+  function deAuthenticate(event) {
+    event.preventDefault();
+    logout();
+    history.push('/');
   }
 
   return (
     <div>
       <Menu color="blue" inverted secondary>
-        <Menu.Item value="menu" icon="bars" onClick={() => sidebarVisible(true)} />
+        <Menu.Item data-testid="sidebar" value="menu" icon="bars" onClick={() => sidebarVisible(true)} />
         <Menu.Item>
           <Form onSubmit={onSearch}>
             <Form.Input

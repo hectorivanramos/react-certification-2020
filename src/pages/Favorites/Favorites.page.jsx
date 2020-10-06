@@ -7,16 +7,6 @@ function FavoritesPage() {
   const localData = localStorage.getItem('favorites');
   const favorites = localData ? JSON.parse(localData) : [];
 
-  // const requestVideo = async (id) => {
-  //   try {
-  //     const response = await apiClient.getSingleVideo(id);
-  //     console.log('Request Returned...', response);
-  //     setVideos([...videos, response.items]);
-  //   } catch (error) {
-  //     console.log('Request Failed...', error);
-  //   }
-  // };
-
   return (
     <SidebarMenu>
       <Header as="h1" color="blue">

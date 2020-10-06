@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Header } from 'semantic-ui-react';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import APIClient from '../../client/apiClient';
 import './Home.styles.css';
 import SidebarMenu from '../../components/Menus/Sidebar.component';
@@ -10,23 +10,23 @@ function HomePage() {
   const sectionRef = useRef(null);
   const apiClient = new APIClient();
   const [payload, setPayload] = useState([]);
-  const history = useHistory();
-  const params = new URLSearchParams(history.location.search);
-  const search = params.get('search');
+  const { key } = useParams();
 
   const requestOverview = async () => {
-    if (search == null) {
+    if (key == null) {
       try {
         const response = await apiClient.getOverview();
         console.log('Request Returned...', response);
+        console.log('Store data on payload')
         setPayload(response.items);
       } catch (error) {
         console.log('Request Failed...', error);
       }
     } else {
       try {
-        const response = await apiClient.getSearch(search);
+        const response = await apiClient.getSearch(key);
         console.log('Request Returned...', response);
+        console.log('Store data on payload')
         setPayload(response.items);
       } catch (error) {
         console.log('Request Failed...', error);
@@ -35,12 +35,9 @@ function HomePage() {
   };
 
   useEffect(() => {
+    console.log('Fetch info from Api for home page.', key)
     requestOverview();
-  }, []);
-
-  useEffect(() => {
-    history.listen(requestOverview);
-  }, []);
+  }, [key]);
 
   return (
     <section className="homepage" ref={sectionRef}>

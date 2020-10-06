@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Grid, Menu, Sidebar } from 'semantic-ui-react';
 import { useAuth } from '../../providers/Auth';
 import HomeMenu from './Menu.component';
 import './Menus.styles.css';
 
 const SidebarMenu = ({ children }) => {
-  const history = useHistory();
   const [visible, setVisible] = useState(false);
-  const { logout, authenticated } = useAuth();
-
-  function deAuthenticate(event) {
-    event.preventDefault();
-    logout();
-    history.push('/');
-  }
+  const { authenticated } = useAuth();
 
   return (
     <Grid columns={1} className="sidemenu">
@@ -33,16 +26,15 @@ const SidebarMenu = ({ children }) => {
             <Menu.Item as={Link} to="/">
               Home
             </Menu.Item>
-            {authenticated &&
+            {authenticated && (
               <Menu.Item as={Link} to="/favorites">
                 Favorites
               </Menu.Item>
-            }
+            )}
           </Sidebar>
           <Sidebar.Pusher dimmed={visible}>
             <HomeMenu
               useAuth={useAuth}
-              deAuthenticate={deAuthenticate}
               sidebarVisible={setVisible}
             />
             {children}
